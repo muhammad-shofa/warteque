@@ -1,5 +1,10 @@
 <?php
 session_start();
+
+if ($_SESSION['is_login'] == false) {
+    header("Location: ../index.php");
+}
+
 ?>
 
 <!DOCTYPE html>

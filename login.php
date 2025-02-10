@@ -6,7 +6,7 @@ if (isset($_POST['login'])) {
     $username = htmlspecialchars($_POST['username']);
     $password = htmlspecialchars($_POST['password']);
 
-    $stmt = $connection->prepare("SELECT * FROM users WHERE username = ? AND password = ?");
+    $stmt = $connected->prepare("SELECT * FROM users WHERE username = ? AND password = ?");
     $stmt->bind_param("ss", $username, $password);
     $stmt->execute();
     $result = $stmt->get_result();

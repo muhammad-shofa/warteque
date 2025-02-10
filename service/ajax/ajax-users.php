@@ -5,14 +5,14 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
     // users
     if (isset($_GET["user_id"])) {
         $user_id = $_GET["user_id"];
-        $stmt = $connection->prepare("SELECT * FROM users WHERE user_id = ?");
+        $stmt = $connected->prepare("SELECT * FROM users WHERE user_id = ?");
         $stmt->bind_param("i", $user_id);
         $stmt->execute();
         $result = $stmt->get_result();
         $data = $result->fetch_assoc();
         echo json_encode($data);
     } else {
-        $stmt = $connection->prepare("SELECT * FROM users");
+        $stmt = $connected->prepare("SELECT * FROM users");
         $stmt->execute();
         $result = $stmt->get_result();
 

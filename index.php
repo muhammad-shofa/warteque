@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <div class="container-lg bg-light mx-auto p-4">
+    <div class="container-xl bg-light mx-auto p-4">
         <!-- navbar start -->
         <?php include "components/navbar.php" ?>
         <!-- navbar end -->

@@ -1,21 +1,27 @@
-<nav class="navbar navbar-expand-lg bg-light shadow-sm">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="#">Warteque</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="../index.php">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-warning text-white me-2" href="../login.php">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-outline-warning" href="../register.php">Register</a>
-                </li>
-            </ul>
-        </div>
-    </div>
+ <!-- Topbar -->
+ <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+<!-- Sidebar Toggle (Topbar) -->
+<button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+    <i class="fa fa-bars"></i>
+</button>
+
+<!-- Topbar Navbar -->
+<ul class="navbar-nav ml-auto">
+    <div class="topbar-divider d-none d-sm-block"></div>
+
+    <!-- Nav Item - User Information -->
+    <li class="nav-item dropdown no-arrow">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span
+                class="mr-2 d-none d-lg-inline text-gray-600 small"><?= isset($_SESSION['name']) ? $_SESSION['name'] : "John Doe" ?></span>
+        </a>
+        
+        
+    </li>
+
+</ul>
+
 </nav>
+<!-- End of Topbar -->

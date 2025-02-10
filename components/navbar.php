@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-light shadow-sm">
+<nav class="navbar navbar-expand-lg bg-white shadow-sm">
     <div class="container">
         <a class="navbar-brand fw-bold" href="#">Warteque</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
