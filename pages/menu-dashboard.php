@@ -345,7 +345,6 @@ if ($_SESSION['is_login'] == false) {
                         $('#edit_nama_makanan').val(data.nama_makanan);
                         $('#edit_deskripsi').val(data.deskripsi);
                         $('#edit_harga').val(data.harga);
-                        // $('#edit_gambar').val(data.gambar);
 
                         // Menampilkan gambar yang sudah ada di database
                         if (data.gambar) {
