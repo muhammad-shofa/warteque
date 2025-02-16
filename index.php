@@ -100,8 +100,8 @@ $results_menu = $connected->query($sql_get_menu);
         </div>
 
         <script>
-            $(document).ready(function () {
-                $(".select-btn").click(function () {
+            $(document).ready(function() {
+                $(".select-btn").click(function() {
                     let menuId = $(this).data("menu-id");
                     let nama = $(this).data("nama");
                     let harga = $(this).data("harga");
@@ -116,14 +116,14 @@ $results_menu = $connected->query($sql_get_menu);
                     $("#orderModal").modal("show");
                 });
 
-                $("#modal-jumlah").on("input", function () {
+                $("#modal-jumlah").on("input", function() {
                     let harga = parseInt($("#modal-menu-harga").val());
                     let jumlah = parseInt($(this).val()) || 1;
                     let totalHarga = jumlah * harga;
                     $("#modal-total-harga").text("Rp " + totalHarga);
                 });
 
-                $("#orderNow").click(function () {
+                $("#orderNow").click(function() {
                     let menuId = $("#modal-menu-id").val();
                     let harga = parseInt($("#modal-menu-harga").val());
                     let jumlah = parseInt($("#modal-jumlah").val());
@@ -139,7 +139,7 @@ $results_menu = $connected->query($sql_get_menu);
                             jumlah: jumlah,
                             total_harga: totalHarga
                         },
-                        success: function (response) {
+                        success: function(response) {
                             let data = JSON.parse(response);
                             if (data.success) {
                                 alert("Pesanan berhasil! Total: Rp " + totalHarga);

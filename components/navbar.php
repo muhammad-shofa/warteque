@@ -9,12 +9,20 @@
                 <li class="nav-item">
                     <a class="nav-link" href="index.php">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="btn btn-warning text-white me-2" href="login.php">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-outline-warning" href="register.php">Register</a>
-                </li>
+
+                <?php
+                if (isset($_SESSION[''])) {
+                ?>
+                    <li class="nav-item">
+                        <a class="btn btn-warning text-white me-2" href="login.php">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-outline-warning" href="register.php">Register</a>
+                    </li>
+                <?php } else { ?>
+                    <button>logout</button>
+                <?php } ?>
+
             </ul>
         </div>
     </div>

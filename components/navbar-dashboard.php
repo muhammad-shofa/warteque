@@ -17,7 +17,12 @@
             <span
                 class="mr-2 d-none d-lg-inline text-gray-600 small"><?= isset($_SESSION['name']) ? $_SESSION['name'] : "John Doe" ?></span>
         </a>
-        
+
+        <form method="post" action="">
+            <button type="submit" name="logout" class="btn btn-danger">
+            <i class="fas fa-right-from-bracket"></i>
+            </button>
+        </form>
         
     </li>
 
@@ -25,3 +30,13 @@
 
 </nav>
 <!-- End of Topbar -->
+
+
+<?php 
+
+if (isset($_POST['logout'])) {
+    header('location: ../index.php');
+    session_unset();
+    session_destroy();
+}
+?>

@@ -6,8 +6,11 @@ if (isset($_POST['login'])) {
     $username = htmlspecialchars($_POST['username']);
     $password = htmlspecialchars($_POST['password']);
 
+    // hash password
+    $hash_password = hash('sha256', $password);
+
     $stmt = $connected->prepare("SELECT * FROM users WHERE username = ? AND password = ?");
-    $stmt->bind_param("ss", $username, $password);
+    $stmt->bind_param("ss", $username, $hash_password);
     $stmt->execute();
     $result = $stmt->get_result();
     $data = $result->fetch_assoc();
@@ -44,7 +47,6 @@ if (isset($_POST['login'])) {
 </head>
 
 <body>
-
     <div class="container-lg bg-light mx-auto p-4">
         <!-- navbar start -->
         <?php include "components/navbar.php" ?>
@@ -63,6 +65,7 @@ if (isset($_POST['login'])) {
                         <label for="password" class="form-label">Password</label>
                         <input type="password" name="password" id="password" class="form-control" required>
                     </div>
+                    <p>Don't have an account yet? <a href="register.php">Register</a></p>
                     <button type="submit" name="login" class="btn btn-primary w-100">Login</button>
                 </form>
             </div>

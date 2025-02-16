@@ -4,24 +4,35 @@ include "service/connection.php";
 
 $status_register = "";
 
-// cek login
-isset($_SESSION['is_login']) ? header("location: index.php") : "";
-
 // insert daftar
-if (isset($_POST["daftar"])) {
+if (isset($_POST["register"])) {
+    $name = htmlspecialchars($_POST["name"]);
     $username = htmlspecialchars($_POST["username"]);
     $password = htmlspecialchars($_POST["password"]);
-    $nama_lengkap = htmlspecialchars($_POST["nama_lengkap"]);
-    $email = htmlspecialchars($_POST["email"]);
-    $tanggal_lahir = htmlspecialchars($_POST["tanggal_lahir"]);
-    $jenis_kelamin = htmlspecialchars($_POST["jenis_kelamin"]);
+    $role = 'pelanggan';
 
     $hash_password = hash('sha256', $password);
 
-    $sql_regis = $insert->selectTable($table_name = "users", $condition = "(username, password, nama_lengkap, email, tanggal_lahir, jenis_kelamin) VALUES ('$username', '$hash_password', '$nama_lengkap', '$email', '$tanggal_lahir', '$jenis_kelamin')");
-    $result = $connected->query($sql_regis);
+    // Check is username alreacy used?
+    // $stmt_check_username = "SELECT * FROM users WHERE username = ?";
+    // $stmt_check_username->bind_param("s", $username);
+    // $stmt_check_username->execute();
+    // $result = $stmt_check_username->get_result();
+    // $data = $result->fetch_assoc();
+    // if ($result->num_rows > 0) {
+    //     $status_register = "Username must be unique";
+    //     exit();
+    // }
+
+
+    $stmt_regis = $connected->prepare("INSERT INTO users (name, username, password, role) VALUES (?, ?, ?, ?)");
+    $stmt_regis->bind_param("ssss", $name, $username, $hash_password, $role);
+    $result = $stmt_regis->execute();
+
     if ($result) {
-        $status_register = "<b>Berhasil mendaftar, silahkan <a href='login.php'>Login!</a></b>";
+        $status_register = "<b>Register successfully, let's <a href='login.php'>Login!</a></b>";
+    } else {
+        $status_register = "<b>Register failed, please try again!</a></b>";
     }
 }
 
@@ -40,102 +51,43 @@ if (isset($_POST["daftar"])) {
         rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
-    <title>Daftar | Desa Jatisari</title>
-    <style>
-        body {
-            background-image: url("assets/img/farmer-2.jpg");
-            background-size: cover;
-            background-repeat: no-repeat;
-        }
-
-        nav span a b {
-            color: #ffc107;
-        }
-    </style>
+    <title>Warteque | Register</title>
 </head>
 
 <body>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-xl-4 col-lg-5 col-sm-6 col-12">
 
+    <div class="container-lg bg-light mx-auto p-4">
+        <!-- navbar start -->
+        <?php include "components/navbar.php" ?>
+        <!-- navbar end -->
 
-            
-
-                <form action="register.php" method="POST" class="my-5" style="padding-top: 6px;">
-                    <div class="border rounded-2 p-4 mt-5 bg-light">
-                        <div class="login-form">
-                            <a href="index.php" class="mb-4 d-flex">
-                                Desa Jatisari
-                            </a>
-                            <h5 class="fw-bold mb-3">Daftar untuk mengakses semua fitur.</h5>
-                            <p class="text-success">
-                                <?= $status_register ?>
-                            </p>
-                            <div class="mb-3">
-                                <label class="form-label" for="username">Username</label>
-                                <input type="text" name="username" id="username" class="form-control"
-                                    placeholder="Masukkan username" required />
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="password">Password</label>
-                                <input type="password" name="password" id="password" class="form-control"
-                                    placeholder="Masukkan password" required />
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="nama_lengkap">Nama Lengkap</label>
-                                <input type="text" name="nama_lengkap" id="nama_lengkap" class="form-control"
-                                    placeholder="Masukkan nama lengkap" required />
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="email">Email</label>
-                                <input type="email" name="email" id="email" class="form-control"
-                                    placeholder="Masukkan email" required />
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="tanggal_lahir">Tanggal Lahir</label>
-                                <input type="date" name="tanggal_lahir" id="tanggal_lahir" class="form-control"
-                                    required />
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="jenis_kelamin">Jenis Kelamin</label>
-                                <select name="jenis_kelamin" id="jenis_kelamin" class="form-select"
-                                    aria-label="Default select example">
-                                    <option value="Laki-Laki">Laki - Laki</option>
-                                    <option value="Perempuan">Perempuan</option>
-                                </select>
-                            </div>
-
-                            <div class="d-flex align-items-center justify-content-between mt-3">
-                                <div class="form-check m-0">
-                                    <input class="form-check-input" type="checkbox" id="s&k" required />
-                                    <label class="form-check-label" for="s&k">Saya menyetujui <a
-                                            href="pages/s&k.php">syarat dan ketentuan</a></label>
-                                </div>
-                            </div>
-                            <div class="d-grid py-3 mt-3">
-                                <button type="submit" name="daftar" class="btn btn-lg btn-primary"
-                                    data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
-                                    Daftar
-                                </button>
-                            </div>
-                            <div class="text-center pt-4">
-                                <span>Sudah memiliki akun?</span>
-                                <a href="login.php" class="text-blue text-decoration-underline ms-2">
-                                    Masuk</a>
-                            </div>
-                        </div>
+        <!-- form register start -->
+        <div class="d-flex justify-content-center mt-5">
+            <div class="w-50 mt-5">
+                <form action="" method="POST" class="p-4 border rounded shadow-sm bg-white">
+                    <h2 class="text-center mb-4">Register</h2>
+                    <p class="text-center">
+                        <?= $status_register ? $status_register : "" ?>
+                    </p>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" name="name" id="name" class="form-control" required>
                     </div>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" name="username" id="username" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" name="password" id="password" class="form-control" required>
+                    </div>
+                    <p>Already have an account? <a href="login.php">Login</a></p>
+                    <button type="submit" name="register" class="btn btn-primary w-100">Register</button>
                 </form>
-                <!-- /form end -->
             </div>
         </div>
+        <!-- form register end -->
     </div>
-
-    <!-- js -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
 </body>
 
 </html>
