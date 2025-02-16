@@ -25,15 +25,16 @@ $results_menu = $connected->query($sql_get_menu);
 </head>
 
 <body class="bg-light">
-    <div class="container-xl bg-light p-4 bg-warning">
+    <div class="container-xl bg-light p-4">
         <!-- navbar start -->
         <?php include "components/navbar.php" ?>
         <!-- navbar end -->
 
         <!-- menu makanan start -->
-        <div class="menu-makanan my-5 d-flex justify-content-center flex-wrap gap-5">
+        <div class="menu-makanan my-5 d-flex justify-content-evenly flex-wrap gap-3">
             <?php if ($results_menu->num_rows > 0) { ?>
                 <?php while ($data_menu = $results_menu->fetch_assoc()) { ?>
+                    <!-- <div class="col-md-4"> -->
                     <div class="card" style="width: 250px;">
                         <img src="assets/img/uploads/<?= $data_menu['gambar'] ?>" class="card-img-top" alt="Menu Img"
                             width="250px" height="250px">
@@ -41,17 +42,16 @@ $results_menu = $connected->query($sql_get_menu);
                             <h5 class="card-title"><?= $data_menu['nama_makanan'] ?></h5>
                             <p class="card-text"><?= $data_menu['deskripsi'] ?></p>
                             <p class="fw-bold">Rp <?= $data_menu['harga'] ?></p>
-                            <button class="btn btn-primary select-btn" data-menu-id="<?= $data_menu['menu_id'] ?>"
-                                data-nama="<?= $data_menu['nama_makanan'] ?>"
-                                data-harga="<?= $data_menu['harga'] ?>">Select</button>
+                            <button class="btn btn-warning select-btn" data-menu-id="<?= $data_menu['menu_id'] ?>">Select</button>
                         </div>
                     </div>
+                    <!-- </div> -->
                 <?php } ?>
             <?php } ?>
         </div>
         <!-- menu makanan end -->
 
-        <!-- Modal Order Start -->
+        <!-- Modal -->
         <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -62,7 +62,6 @@ $results_menu = $connected->query($sql_get_menu);
                     <div class="modal-body">
                         <p id="modal-menu-name"></p>
                         <input type="hidden" id="modal-menu-id">
-                        <input type="hidden" id="modal-user-id" value="<?= $_SESSION['user_id'] ?>">
                         <input type="hidden" id="modal-menu-harga">
                         <label for="modal-jumlah">Jumlah:</label>
                         <input type="number" id="modal-jumlah" class="form-control" min="1" value="1">
@@ -75,38 +74,15 @@ $results_menu = $connected->query($sql_get_menu);
                 </div>
             </div>
         </div>
-        <!-- Modal Order End -->
-
-        <!-- Modal Status Order Start -->
-        <div class="modal fade" id="statusOrderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="orderModalLabel">Status Order</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p id="textStatusOrder"></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Modal Status Order End -->
 
         <script>
             $(document).ready(function() {
-
-                // ketika button dengan class .select-btn diklik maka akan ambil data dari atribut tertentu dan ditampilkan pada modal
                 $(".select-btn").click(function() {
-                    let menu_id = $(this).data("menu-id");
+                    let menuId = $(this).data("menu-id");
                     let nama = $(this).data("nama");
                     let harga = $(this).data("harga");
 
-                    $("#modal-menu-id").val(menu_id);
-                    $("#modal-jumlah").val("1");
+                    $("#modal-menu-id").val(menuId);
                     $("#modal-menu-harga").val(harga);
                     $("#modal-menu-name").text(nama);
 
@@ -116,7 +92,6 @@ $results_menu = $connected->query($sql_get_menu);
                     $("#orderModal").modal("show");
                 });
 
-                // ketik ada perubahan pada inputan jumlah, maka akan mengkalkulasikannya secara otomatis
                 $("#modal-jumlah").on("input", function() {
                     let harga = parseInt($("#modal-menu-harga").val());
                     let jumlah = parseInt($(this).val()) || 1;
@@ -124,35 +99,31 @@ $results_menu = $connected->query($sql_get_menu);
                     $("#modal-total-harga").text("Rp " + totalHarga);
                 });
 
-                // ketika tombol order now pada modal diklik maka kan mengirim data ke backend untuk dimasukkan kedalam database
                 $("#orderNow").click(function() {
-                    let menu_id = $("#modal-menu-id").val();
-                    let user_id = $("#modal-user-id").val();
+                    let menuId = $("#modal-menu-id").val();
                     let harga = parseInt($("#modal-menu-harga").val());
                     let jumlah = parseInt($("#modal-jumlah").val());
                     let totalHarga = jumlah * harga;
+                    let userId = 1; // Gantilah dengan ID user yang login
 
                     $.ajax({
                         url: "service/ajax/ajax-pesanan.php",
                         type: "POST",
                         data: {
-                            menu_id: menu_id,
-                            user_id: user_id,
+                            menu_id: menuId,
+                            user_id: userId,
                             jumlah: jumlah,
                             total_harga: totalHarga
                         },
                         success: function(response) {
                             let data = JSON.parse(response);
                             if (data.success) {
-                                // alert("Your orders successfull! Total: Rp " + totalHarga);
+                                alert("Pesanan berhasil! Total: Rp " + totalHarga);
                                 $("#orderModal").modal("hide");
-                                $("#textStatusOrder").text("Your order has been noted by the chef! Total: Rp " + totalHarga);
-                                $("#statusOrderModal").modal("show");
                             } else {
-                                $("#textStatusOrder").text("Order failed! please try again later");
-                                $("#statusOrderModal").modal("show");
-                                // alert("Gagal memesan. Coba lagi!");
+                                alert("Gagal memesan. Coba lagi!");
                             }
+                            logout
                         }
                     });
                 });

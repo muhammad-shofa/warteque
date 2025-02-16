@@ -17,6 +17,7 @@ if (isset($_POST['login'])) {
 
     if ($result->num_rows > 0) {
         $_SESSION['is_login'] = true;
+        $_SESSION['user_id'] = $data['user_id'];
         $_SESSION['name'] = $data['name'];
         $_SESSION['role'] = $data['role'];
         if ($data['role'] == 'admin') {
