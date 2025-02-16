@@ -24,39 +24,69 @@ session_start();
 
 <body class="bg-light">
     <div class="container-xl bg-light p-4 bg-warning">
+        <p id="user_id" class="text-dark d-none"><?= $_SESSION['user_id'] ?? "" ?></p>
+
         <!-- navbar start -->
         <?php include "components/navbar.php" ?>
         <!-- navbar end -->
 
-        <!-- menu makanan start -->
-        <div class="menu-makanan my-5 d-flex justify-content-center flex-wrap gap-5">
-            <?php if ($results_menu->num_rows > 0) { ?>
-                <?php while ($data_menu = $results_menu->fetch_assoc()) { ?>
-                    <div class="card" style="width: 250px;">
-                        <img src="assets/img/uploads/<?= $data_menu['gambar'] ?>" class="card-img-top" alt="Menu Img"
-                            width="250px" height="250px">
-                        <div class="card-body">
-                            <h5 class="card-title"><?= $data_menu['nama_makanan'] ?></h5>
-                            <p class="card-text"><?= $data_menu['deskripsi'] ?></p>
-                            <p class="fw-bold">Rp <?= $data_menu['harga'] ?></p>
-                            <button class="btn btn-primary select-btn" data-menu-id="<?= $data_menu['menu_id'] ?>"
-                                data-nama="<?= $data_menu['nama_makanan'] ?>"
-                                data-harga="<?= $data_menu['harga'] ?>">Select</button>
-                        </div>
-                    </div>
-                <?php } ?>
-            <?php } ?>
+        <!--  -->
+        <div class="container mt-4">
+            <h4 class="mb-3">Your Orders List</h4>
+            <div id="list-pesanan" class="row">
+                <!-- Data pesanan akan dimasukkan di sini menggunakan jQuery -->
+            </div>
         </div>
-        <!-- menu makanan end -->
+        <!--  -->
 
         <script>
             $(document).ready(function() {
-                $.ajax({
-                    url: "service/ajax/ajax-pesanan.php",
-                    data: {
-                        user_id: user_id
-                    }
-                })
+                let user_id = $("#user_id").text();
+                console.log(user_id);
+
+                if (user_id) {
+                    $.ajax({
+                        url: "service/ajax/ajax-pesanan.php",
+                        method: "POST",
+                        data: {
+                            show_order_user_id: user_id
+                        },
+                        dataType: "json",
+                        success: function(response) {
+                            console.log("Response dari server:", response);
+                            if (response.success) {
+                                let orders = response.orders;
+                                $("#list-pesanan").empty(); // Bersihkan data sebelum menambahkan yang baru
+
+                                orders.forEach(function(item) {
+                                    let totalHarga = item.jumlah * item.harga; // Hitung total harga
+
+                                    // <p class="card-text"><strong>Harga:</strong> Rp ${item.harga.toLocaleString()}</p>
+                                    let pesananHTML = `
+                                    <div class="col-md-4">
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                            <h5 class="card-title">${item.nama_makanan}</h5>
+                                            <img src="assets/img/uploads/${item.gambar}" class="card-img-top w-50" alt="${item.gambar}">
+                                                <p class="card-text"><strong>Jumlah:</strong> ${item.jumlah}</p>
+                                                <p class="card-text"><strong>Total Harga:</strong> Rp ${item.total_harga}</p>
+                                            </div>
+                                        </div>
+                                    </div>`;
+
+                                    $("#list-pesanan").append(pesananHTML);
+                                });
+                            } else {
+                                $("#list-pesanan").html(`<p class="text-muted">You have no orders yet.</p>`);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Error:", error);
+                        }
+                    });
+                } else {
+                    console.log("User ID tidak ditemukan!");
+                }
             });
         </script>
 

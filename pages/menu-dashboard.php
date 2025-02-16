@@ -50,10 +50,10 @@ if ($_SESSION['is_login'] == false) {
             <!-- Main Content -->
             <div id="content">
 
-            <!-- navbar start -->
-            <?php include "../components/navbar-dashboard.php" ?>
-            <!-- navbar end -->
-               
+                <!-- navbar start -->
+                <?php include "../components/navbar-dashboard.php" ?>
+                <!-- navbar end -->
+
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
@@ -267,36 +267,36 @@ if ($_SESSION['is_login'] == false) {
 
     <!-- javascript -->
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             var menuTable = $('#menuTable').DataTable({
                 "ajax": "../service/ajax/ajax-menu.php",
                 "columns": [{
-                    "data": "no"
-                },
-                {
-                    "data": "nama_makanan"
-                },
-                {
-                    "data": "deskripsi"
-                },
-                {
-                    "data": "harga"
-                },
-                {
-                    "data": "show_gambar"
-                },
-                {
-                    "data": "action",
-                    // "orderable": true,
-                    // "searchable": true
-                }
+                        "data": "no"
+                    },
+                    {
+                        "data": "nama_makanan"
+                    },
+                    {
+                        "data": "deskripsi"
+                    },
+                    {
+                        "data": "harga"
+                    },
+                    {
+                        "data": "show_gambar"
+                    },
+                    {
+                        "data": "action",
+                        // "orderable": true,
+                        // "searchable": true
+                    }
                 ],
                 "responsive": true,
                 // paging: false
             });
 
             // Tambah menu
-            $('#simpanTambah').click(function () {
+            $('#simpanTambah').click(function() {
                 // var data = $('#formTambah').serialize();
 
                 var formData = new FormData($('#formTambah')[0]);
@@ -308,7 +308,7 @@ if ($_SESSION['is_login'] == false) {
                     data: formData,
                     contentType: false,
                     processData: false,
-                    success: function (response) {
+                    success: function(response) {
                         $('#modalTambah').modal('hide');
                         $("#preview_gambar").attr("src", "#").show();
                         $("#preview_gambar").hide();
@@ -320,12 +320,12 @@ if ($_SESSION['is_login'] == false) {
             });
 
             // tampilkan preview ketika ada gambar yang akan diupload
-            $("#tambah_gambar").change(function (event) {
+            $("#tambah_gambar").change(function(event) {
                 let input = this;
                 if (input.files && input.files[0]) {
                     let reader = new FileReader();
 
-                    reader.onload = function (e) {
+                    reader.onload = function(e) {
                         $("#preview_gambar").attr("src", e.target.result).show();
                     };
 
@@ -334,13 +334,13 @@ if ($_SESSION['is_login'] == false) {
             });
 
             // mengambil data untuk ditampilkan pada modal edit
-            $('#menuTable').on('click', '.edit', function () {
+            $('#menuTable').on('click', '.edit', function() {
                 let menu_id = $(this).data('menu_id');
                 $.ajax({
                     url: '../service/ajax/ajax-menu.php?menu_id=' + menu_id,
                     type: 'GET',
                     dataType: 'json',
-                    success: function (data) {
+                    success: function(data) {
                         $('#edit_menu_id').val(data.menu_id);
                         $('#edit_nama_makanan').val(data.nama_makanan);
                         $('#edit_deskripsi').val(data.deskripsi);
@@ -359,12 +359,12 @@ if ($_SESSION['is_login'] == false) {
             });
 
             // tampilkan preview ketika ada gambar yang akan diupload pada modal edit
-            $('#edit_gambar').change(function (event) {
+            $('#edit_gambar').change(function(event) {
                 let input = this;
                 if (input.files && input.files[0]) {
                     let reader = new FileReader();
 
-                    reader.onload = function (e) {
+                    reader.onload = function(e) {
                         $('#edit_preview_gambar_db').hide();
 
                         $('#edit_preview_gambar_new').attr('src', e.target.result).show();
@@ -375,7 +375,7 @@ if ($_SESSION['is_login'] == false) {
             });
 
             // Menyimpan edit
-            $('#simpanEdit').click(function () {
+            $('#simpanEdit').click(function() {
                 // var data = $('#formEdit').serialize();
                 var formData = new FormData($('#formEdit')[0]);
 
@@ -386,7 +386,7 @@ if ($_SESSION['is_login'] == false) {
                     data: formData,
                     contentType: false,
                     processData: false,
-                    success: function (response) {
+                    success: function(response) {
                         $('#modalEdit').modal('hide');
                         menuTable.ajax.reload();
                         $('#formEdit')[0].reset();
@@ -397,7 +397,7 @@ if ($_SESSION['is_login'] == false) {
 
 
             // hapus data sesuai id
-            $('#menuTable').on('click', '.delete', function () {
+            $('#menuTable').on('click', '.delete', function() {
                 var menu_id = $(this).data('menu_id');
                 if (confirm('Anda yakin ingin menghapus menu ini?')) {
                     $.ajax({
@@ -406,7 +406,7 @@ if ($_SESSION['is_login'] == false) {
                         data: {
                             menu_id: menu_id
                         },
-                        success: function (response) {
+                        success: function(response) {
                             menuTable.ajax.reload();
                             alert(response);
                         }

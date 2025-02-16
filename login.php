@@ -21,9 +21,9 @@ if (isset($_POST['login'])) {
         $_SESSION['name'] = $data['name'];
         $_SESSION['role'] = $data['role'];
         if ($data['role'] == 'admin') {
-            header("Location: pages/dashboard.php");
+            header("location: pages/dashboard.php");
         } else {
-            header("Location: index.php");
+            header("location: index.php");
         }
     } else {
         echo "Username atau password salah!";
