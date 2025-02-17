@@ -83,7 +83,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
             $stmt->close();
         }
-
     } else {
         $nama_makanan = htmlspecialchars($_POST["nama_makanan"]);
         $deskripsi = htmlspecialchars($_POST["deskripsi"]);
@@ -98,6 +97,8 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
             // lokasi gambar
             $location = "../../assets/img/uploads/" . basename($gambar);
 
+            var_dump($tmp);
+            var_dump($location);
             // Pindahkan file ke folder tujuan
             if (move_uploaded_file($tmp, $location)) {
                 $stmt = $connected->prepare("INSERT INTO menu (nama_makanan, deskripsi, harga, gambar) VALUES (?, ?, ?, ?)");
@@ -115,7 +116,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
             }
         }
     }
-
 } else if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
     // Hapus barang 
     parse_str(file_get_contents("php://input"), $data);

@@ -96,6 +96,17 @@ $results_menu = $connected->query($sql_get_menu);
         </div>
         <!-- Modal Status Order End -->
 
+        <!-- footer start -->
+        <footer class="d-flex bg-dark text-white flex-wrap justify-content-center">
+            <div class="footer-warteque">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo laudantium incidunt assumenda est cum, cumque esse praesentium deleniti itaque quam perspiciatis omnis doloribus expedita maiores placeat eum. Architecto, impedit ducimus!</p>
+            </div>
+
+            
+
+        </footer>
+        <!-- footer end -->
+
         <script>
             $(document).ready(function() {
 

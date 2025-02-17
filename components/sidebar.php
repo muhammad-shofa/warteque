@@ -37,13 +37,6 @@
             <span>Menu</span></a>
     </li>
 
-    <!-- Nav Item - Order -->
-    <li class="nav-item active">
-        <a class="nav-link" href="orders-dashboard.php">
-            <i class="fas fa-fw fa-shopping-cart"></i>
-            <span>Orders</span></a>
-    </li>
-
     <!-- Divider -->
     <hr class="sidebar-divider">
 

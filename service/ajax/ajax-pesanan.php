@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // ambil pesanan sesuai user_id yang ada
         // $query = "SELECT * FROM pesanan WHERE user_id = ?";
-        $query = "SELECT pesanan.*, menu.nama_makanan, menu.gambar 
+        $query = "SELECT pesanan.*, menu.nama_makanan, menu.gambar, menu.harga
           FROM pesanan 
           INNER JOIN menu ON pesanan.menu_id = menu.menu_id 
           WHERE pesanan.user_id = ?";
@@ -46,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmt->close();
     } else {
+        // masukkan order user ke table pesanan
         $menu_id = htmlspecialchars($_POST['menu_id']);
         $user_id = htmlspecialchars($_POST['user_id']);
         $jumlah = htmlspecialchars($_POST['jumlah']);
@@ -66,6 +67,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         echo json_encode($response);
     }
+} else if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+    parse_str(file_get_contents("php://input"), $data);
+    $menu_id = $data["menu_id"];
+    $user_id = $data["user_id"];
+    // $user_id = 
+
+    $stmt = $connected->prepare("DELETE FROM pesanan WHERE menu_id = ? && user_id = ?");
+    $stmt->bind_param("ii", $menu_id, $user_id);
+
+    if ($stmt->execute()) {
+        echo "Berhasil menghapus menu";
+    } else {
+        echo "Gagal menghapus menu" . $stmt->error;
+    }
+
+    echo json_encode();
 }
 
 $connected->close();
